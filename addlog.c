@@ -15,7 +15,8 @@ int checkchar(char *p)
 			if (flag == 1 && *p == '{')
 			{
 				flag = 2;
-				printf("\tprintf(\"line %%d\\n\", __LINE__);\n");
+				printf("\tprintf(\"line %d\\n\", __LINE__);\n");
+				return flag;
 			}
 			if (flag == 1 && *p != ' ' && *p != '\r' && *p != '\n' && *p != '\t' && *p != ')' && *p != '{')
 			{
@@ -43,9 +44,9 @@ int checkchar(char *p)
 
 int main(int argc, char** argv)
 {
-	if (argc != 2)
+	if (argc != 3)
 	{
-		printf("use:%s source_file_name.c dist_file_name.c\n");
+		printf("use:%s source_file_name.c dist_file_name.c\n", argv[0]);
 		return 0;
 	}
 	FILE *fp1,*fp2;
