@@ -4,9 +4,9 @@ int checkchar(char *p)
 {
 	static int flag = 0;
 	printf("%s", p);
-    while(*p)
-    {
-        if(*p != NULL && *p != '\r' && *p != '\n')
+	while(*p)
+	{
+		if(*p != NULL && *p != '\r' && *p != '\n')
 		{
 			if (*p == ')')
 			{
@@ -25,8 +25,8 @@ int checkchar(char *p)
 			p++;
 			continue;
 		}
-        p++;
-    }
+		p++;
+	}
 	if (*p == '\0')
 	{
 		return 0;
