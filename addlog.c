@@ -1,5 +1,48 @@
 #include <stdio.h>
 
+#include <string.h>
+#include <stdlib.h>
+#include <sys/stat.h> 
+#include <uci.h>
+#include <unistd.h>
+#include <syslog.h>
+#include <stdarg.h>
+#include <time.h>
+
+int debug = 0;
+
+void xprintf(const char *fmt, ...)
+{
+    if( debug==0 ) 
+    {
+        return;
+    }
+
+    va_list args;
+    char buf[2048]={0};
+    int  len = 0;
+    memset((void *)buf, 0, sizeof(buf));
+#ifdef _WIN32
+    time_t tnow = time(NULL);
+    struct tm* ptm = localtime(&tnow);
+    len = sprintf(buf, "--%d-%.2d-%.2d %.2d:%.2d:%.2d--", ptm->tm_year+1900, ptm->tm_mon+1, ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+#else
+    time_t tnow;
+    time(&tnow);
+    struct tm *ptm = localtime(&tnow);//gmtime(&tnow);
+    len = sprintf(buf, "[%d-%02d-%02d %02d:%02d:%02d]", (1900+ptm->tm_year),(1+ptm->tm_mon),ptm->tm_mday, ptm->tm_hour, ptm->tm_min, ptm->tm_sec);
+#endif
+    va_start(args, fmt);
+    vsnprintf(&buf[len], (sizeof(buf) - len), fmt, args);
+    va_end(args);
+
+#ifdef _ANDROID
+    LOGD("%s\n", buf);
+#else
+    printf("%s\n", buf);
+#endif
+}
+
 int checkchar(char *p)
 {
 	static int flag = 0;
